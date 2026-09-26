@@ -29,3 +29,13 @@ def test_classification_report_dict_keys():
     y_prob = [0.1, 0.8, 0.2, 0.6, 0.9]
     report = classification_report_dict(y_true, y_prob)
     assert "roc_auc" in report and "pr_auc" in report
+
+def test_top_drivers_for_customer(churn_artifact_path):
+    from cas.churn.explain import top_drivers_for_customer
+    from cas.churn.predict import predict_one
+
+    path, feature_dict = churn_artifact_path
+    _, X_row = predict_one(feature_dict, artifact_path=path)
+    drivers = top_drivers_for_customer(X_row, artifact_path=path, top_n=2)
+    assert len(drivers) <= 2
+    assert all("feature" in d and "impact" in d for d in drivers)

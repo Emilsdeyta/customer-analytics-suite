@@ -32,3 +32,23 @@ def test_negative_clv_raises():
 def test_invalid_offer_propensity_raises(bad_prop):
     with pytest.raises(ValueError):
         compute_priority_score(churn_probability=0.5, clv=100, best_offer_propensity=bad_prop)
+
+
+def test_score_customer_pair_end_to_end(churn_artifact_path, clv_artifact_path, nbo_artifact_path):
+    from cas.scoring.priority import score_customer_pair
+
+    churn_path, churn_features = churn_artifact_path
+    result = score_customer_pair(
+        churn_customer_id="c1",
+        churn_features=churn_features,
+        retail_customer_id="C200",
+        retail_recency=50,
+        retail_frequency=2,
+        retail_monetary=50,
+        churn_artifact_path=churn_path,
+        clv_artifact_path=clv_artifact_path,
+        nbo_artifact_path=nbo_artifact_path,
+    )
+    assert 0.0 <= result.churn_probability <= 1.0
+    assert result.clv >= 0.0
+    assert result.priority_score >= 0.0

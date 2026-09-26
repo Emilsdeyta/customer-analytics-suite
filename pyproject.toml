@@ -49,5 +49,16 @@ target-version = "py311"
 select = ["E", "F", "I", "UP", "B"]
 
 [tool.pytest.ini_options]
+[tool.coverage.run]
+source = ["src/cas"]
+omit = [
+    "src/cas/churn/train.py",
+    "src/cas/nbo/train.py",
+    "src/cas/clv/train.py",
+    "src/cas/churn/data.py",
+    "src/cas/nbo/data.py",
+    "src/cas/clv/data.py",
+    "src/cas/common/config.py",
+]
 testpaths = ["tests"]
 addopts = "-v --cov=src/cas --cov-report=term-missing"
