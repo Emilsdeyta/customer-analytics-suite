@@ -1,0 +1,18 @@
+data:
+  raw_path: "data/raw/online_retail_II.xlsx"
+  processed_path: "data/processed/online_retail_clean.parquet"
+  target_column: "purchased"   # placeholder — NBO uses per-product y_dict, not a single target column
+  id_column: "Customer ID"
+  test_size: 0.2                # unused by nbo/train.py (temporal split is used instead); kept for schema compatibility
+  random_seed: 42
+model:
+  name: "hybrid_propensity_rules"
+  params:
+    top_n_products: 30
+    rules_universe_size: 200
+    holdout_days: 60
+    min_support: 0.02
+    min_confidence: 0.3
+    min_positives: 15
+    cf_components: 15
+artifacts_dir: "models"

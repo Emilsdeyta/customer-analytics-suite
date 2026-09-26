@@ -1,0 +1,13 @@
+data:
+  raw_path: "data/raw/online_retail_II.xlsx"
+  processed_path: "data/processed/online_retail_clean.parquet"
+  target_column: "actual_spend"  # unused directly; kept for schema compatibility
+  id_column: "Customer ID"
+  test_size: 0.2                  # unused by clv/train.py (temporal split used instead)
+  random_seed: 42
+model:
+  name: "btyd_vs_xgboost"
+  params:
+    holdout_days: 90
+    discount_rate: 0.0
+artifacts_dir: "models"

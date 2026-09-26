@@ -1,0 +1,16 @@
+data:
+  raw_path: "data/raw/telco_churn.csv"
+  processed_path: "data/processed/telco_churn_clean.parquet"
+  target_column: "Churn"
+  id_column: "customerID"
+  test_size: 0.2
+  random_seed: 42
+model:
+  name: "lightgbm"
+  params:
+    n_estimators: 300
+    learning_rate: 0.05
+    num_leaves: 31
+    scale_pos_weight: 3
+    random_state: 42
+artifacts_dir: "models"
