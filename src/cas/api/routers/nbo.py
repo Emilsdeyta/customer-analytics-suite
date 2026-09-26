@@ -21,7 +21,7 @@ def predict_nbo(req: NBORequest) -> NBOResponse:
         )
     try:
         offers = recommend_for_customer(req.customer_id, artifact_path=MODEL_PATH)
-    except KeyError:
-        raise HTTPException(status_code=404, detail=f"Unknown customer_id: {req.customer_id}")
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=f"Unknown customer_id: {req.customer_id}") from exc
 
     return NBOResponse(customer_id=req.customer_id, recommended_offers=offers)

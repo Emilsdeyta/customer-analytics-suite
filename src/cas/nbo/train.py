@@ -21,6 +21,7 @@ import pandas as pd
 
 from cas.common.config import load_config
 from cas.common.io import save_artifact
+from cas.nbo.cf import build_interaction_matrix, fit_svd, score_customer
 from cas.nbo.data import clean, load_raw
 from cas.nbo.features import (
     build_customer_features,
@@ -28,7 +29,6 @@ from cas.nbo.features import (
     build_transactions,
     top_products,
 )
-from cas.nbo.cf import build_interaction_matrix, fit_svd, score_customer
 from cas.nbo.propensity import train_propensity_models
 from cas.nbo.rank import hybrid_rank, rule_lifts_for_customer
 from cas.nbo.rules import mine_rules
@@ -56,7 +56,7 @@ def run(config_path: str) -> dict:
     top_n = params.get("top_n_products", 30)
     products = top_products(train_df, n=top_n)
     product_codes = products["StockCode"].tolist()
-    product_descriptions = dict(zip(products["StockCode"], products["description"]))
+    product_descriptions = dict(zip(products["StockCode"], products["description"], strict=True))
 
     print("Building customer features...")
     customer_feats = build_customer_features(train_df)

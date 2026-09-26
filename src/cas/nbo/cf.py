@@ -36,4 +36,4 @@ def fit_svd(matrix: pd.DataFrame, n_components: int = 15, random_seed: int = 42)
 def score_customer(user_vector: np.ndarray, item_factors: np.ndarray, product_codes: list[str]) -> dict[str, float]:
     """Reconstructed affinity score for every product, for one customer's latent vector."""
     scores = user_vector @ item_factors
-    return dict(zip(product_codes, scores))
+    return dict(zip(product_codes, scores, strict=True))
