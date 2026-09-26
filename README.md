@@ -50,7 +50,25 @@ priority_score = churn_probability × CLV × (1 + best_offer_propensity)
 - Churn model: ROC-AUC —, PR-AUC —, top-decile lift —
 - NBO model: Precision@3 —, hit rate —
 - CLV model: Spearman ρ —
+
+
 ### Məlum məhdudiyyət: CLV real-time baseline-ın nöqtəvi proqnozları
+
+`/predict/clv` endpoint-i XGBoost RFM baseline istifadə edir (bax bölmə "Niyə BG/NBD, niyə
+XGBoost real-time üçün"). Bu model 90 günlük holdout dövründəki REAL xərcə görə təlim
+olunub — hədəf dəyişəni kəskin sağa-əyridir (çox müştəri həmin dövrdə heç nə xərcləmir).
+Nəticədə:
+- Tək-tək proqnozlar mənfi ola bilər (sıfır ətrafında reqressiya səs-küyü) — bunlar `predict.py`-də
+  0-a kəsilir.
+- Model orta Spearman ρ = 0.484 ilə işləyir (BTYD-nin 0.582-i ilə müqayisədə zəif) — yəni
+  ÜMUMİ sıralamanı qismən tutur, amma tək-tək müştərilər arasında ciddi qeyri-monotonluq
+  gözlənilir.
+- Bu səbəbdən API-nin çıxışı mütləq dəqiq dollar məbləği kimi deyil, NİSBİ prioritetləşdirmə
+  siqnalı kimi oxunmalıdır (məhz buna görə priority_score düsturunda CLV çarpan kimi istifadə
+  olunur — sıralama üçün, tək başına "həqiqət" kimi deyil).
+
+**Gələcək yaxşılaşdırma:** `log1p(actual_spend)` üzərində təlim etmək sağa-əyriliyi azaldıb
+mənfi proqnozları demək olar ki, aradan qaldırardı — v2 üçün planlaşdırılıb.
 
 `/predict/clv` endpoint-i XGBoost RFM baseline istifadə edir (bax bölmə "Niyə BG/NBD, niyə
 XGBoost real-time üçün"). Bu model 90 günlük holdout dövründəki REAL xərcə görə təlim
